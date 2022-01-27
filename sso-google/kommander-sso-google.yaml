@@ -1,0 +1,48 @@
+apiVersion: config.kommander.mesosphere.io/v1alpha1
+kind: Installation
+apps:
+  dex:
+    values: |
+      config:
+        connectors:
+        - type: oidc
+          id: google
+          name: Google
+          config:
+            issuer: https://accounts.google.com
+            clientID: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            redirectURI: ${GOOGLE_REDIRECT_URI}
+            scopes:
+            - openid
+            - profile
+            - email
+            insecureSkipEmailVerified: true
+            insecureEnableGroups: true
+            userIDKey: email
+            userNameKey: email
+  dex-k8s-authenticator: null
+  gitea: null
+  kommander: null
+  kubefed: null
+  kube-oidc-proxy: null
+  reloader: null
+  traefik: null
+  traefik-forward-auth-mgmt: null
+  metallb:
+    values: |
+      configInline:
+        address-pools:
+          - name: default
+            protocol: layer2
+            addresses:
+              - ${METALLB_ADDRESSES}
+ageEncryptionSecretName: sops-age
+clusterHostname: ${CLUSTER_HOSTNAME}
+ingressCertificate:
+  certificate: ${INGRESS_CERT}
+  private_key: ${INGRESS_KEY}
+  ca: ${INGRESS_CA}
+appManagementImageTag: v2.1.1
+appManagementImageRepository: mesosphere/kommander2-appmanagement
+kommanderChartsVersion: v2.1.1

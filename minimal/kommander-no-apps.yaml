@@ -1,0 +1,25 @@
+apiVersion: config.kommander.mesosphere.io/v1alpha1
+kind: Installation
+apps:
+  #gitea: null # this is only supported from DKP 2.2 onwards
+  metallb:
+    values: |
+      configInline:
+        address-pools:
+          - name: default
+            protocol: layer2
+            addresses:
+              - ${METALLB_ADDRESSES}
+  traefik: null
+ageEncryptionSecretName: sops-age
+clusterHostname: "${CLUSTER_HOSTNAME}"
+ingressCertificate:
+  certificate: ${INGRESS_CERT}
+  private_key: ${INGRESS_KEY}
+  ca: ${INGRESS_CA}
+appManagementImageTag: v2.1.1
+appManagementImageRepository: mesosphere/kommander2-appmanagement
+kommanderChartsVersion: v2.1.1
+airgapped:
+  enabled: true
+  helmMirrorImageTag: "v2.1.1-amd64"
